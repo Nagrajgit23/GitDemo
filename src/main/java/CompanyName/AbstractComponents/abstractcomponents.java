@@ -14,13 +14,24 @@ import CompanyName.SeleniumFramework.Cartpage;
 
 	public class abstractcomponents 
 	{
-		@FindBy(css="[routerlink*='cart']")
-		WebElement cartHeader;
 	protected WebDriver driver;
+	@FindBy(xpath="//button[@routerlink='/dashboard/cart']")
+	WebElement cartHeader;
+	@FindBy(css = "[routerlink*='myorders']")
+	WebElement orderHeader;
+	@FindBy(xpath="//div[aria-label='Incorrect email or password.']")
+	protected WebElement errorMessage;
 	public abstractcomponents(WebDriver driver) 
 	{
 	this.driver=driver;
 	PageFactory.initElements(driver, this);
+	}
+	public void waitForElementToAppear(By findBy)
+	{
+	WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(5));
+	//wait.until(ExpectedConditions.visibilityOfElementLocated(findBy));
+	wait.until(ExpectedConditions.visibilityOfElementLocated(findBy));
+	//.presenceOfElementLocated(By.xpath("//div[@id='results']")));
 	}
 	public void waitForWebElementToAppear(WebElement findBy)
 	{
@@ -34,8 +45,14 @@ import CompanyName.SeleniumFramework.Cartpage;
 	}
 	public Cartpage goToCartPage() 
 	{
-		return null;
-		
-		
+		cartHeader.click();
+		Cartpage cartpage= new Cartpage(driver);
+		return cartpage;
 	}
+		public OrderPage goToOrdersPage()
+		{
+			orderHeader.click();
+			OrderPage orderPage = new OrderPage(driver);
+			return orderPage;
+		}
 }
